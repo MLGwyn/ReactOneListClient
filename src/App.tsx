@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import logo from './images/sdg-logo.svg'
+import axios from 'axios'
 export function App() {
   const [todoItems, setTodoItems] = useState([
     { id: 1, text: 'Do a thing', complete: false },
@@ -14,8 +15,16 @@ export function App() {
     { id: 6, text: 'WOW', complete: true },
   ])
   useEffect(function () {
-    console.log('this runs when the component first mounts'), []
-  })
+    async function loadItems() {
+      const response = await axios.get(
+        'https://one-list-api.herokuapp.com/items?access_token=cohort42'
+      )
+      if (response.status === 200) {
+        console.log(response.data)
+      }
+    }
+    loadItems()
+  }, [])
   return (
     <div className="app">
       <header>
