@@ -2,18 +2,17 @@ import React, { useEffect, useState } from 'react'
 import logo from './images/sdg-logo.svg'
 import axios from 'axios'
 export function App() {
-  const [todoItems, setTodoItems] = useState([
-    { id: 1, text: 'Do a thing', complete: false },
-    { id: 2, text: 'Do something else', complete: false },
-    { id: 3, text: 'Do a third thing', complete: false },
-    { id: 4, text: 'Remind me about the important thing', complete: false },
-    {
-      id: 5,
-      text: 'The important things are the important things',
-      complete: false,
-    },
-    { id: 6, text: 'WOW', complete: true },
-  ])
+  const [todoItems, setTodoItems] = useState<TodoItemType[]>([])
+  const [newTodoText, setNewTodoText] = useState('')
+  async function handleCreateNewTodoItem() {
+    const response = await axios.post(
+      'https://one-list-api.herokuapp.com/items?access_token=cohort42',
+      { item: { text: newTodoText } }
+    )
+    if (response.status === 201) {
+      console.log(response.data)
+    }
+  }
   useEffect(function () {
     async function loadItems() {
       const response = await axios.get(
@@ -21,10 +20,19 @@ export function App() {
       )
       if (response.status === 200) {
         console.log(response.data)
+        setTodoItems(response.data)
       }
     }
     loadItems()
   }, [])
+  type TodoItemType = {
+    id: number
+    text: string
+    complete: boolean
+    updated_at: Date
+    created_at: Date
+  }
+
   return (
     <div className="app">
       <header>
@@ -43,15 +51,27 @@ export function App() {
             )
           })}
         </ul>
-        <form>
-          <input type="text" placeholder="Whats up?" />
+        <form
+          onSubmit={function (event) {
+            event.preventDefault()
+            handleCreateNewTodoItem()
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Whats up?"
+            value={newTodoText}
+            onChange={function (event) {
+              setNewTodoText(event.target.value)
+            }}
+          />
         </form>
       </main>
       <footer>
         <p>
           <img src={logo} height="42" alt="logo" />
         </p>
-        <p>&copy; 2020 Suncoast Developers Guild</p>
+        <p>&copy; 2024 Suncoast Developers Guild</p>
       </footer>
     </div>
   )
