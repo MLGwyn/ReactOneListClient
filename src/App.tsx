@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from './images/sdg-logo.svg'
 export function App() {
   const [todoItems, setTodoItems] = useState([
@@ -13,6 +13,9 @@ export function App() {
     },
     { id: 6, text: 'WOW', complete: true },
   ])
+  useEffect(function () {
+    console.log('this runs when the component first mounts'), []
+  })
   return (
     <div className="app">
       <header>
@@ -21,7 +24,14 @@ export function App() {
       <main>
         <ul>
           {todoItems.map(function (todoItem) {
-            return <li key={todoItem.id}>{todoItem.text}</li>
+            return (
+              <li
+                key={todoItem.id}
+                className={todoItem.complete ? 'completed' : undefined}
+              >
+                {todoItem.text}
+              </li>
+            )
           })}
         </ul>
         <form>
