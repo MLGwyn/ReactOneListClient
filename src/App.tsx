@@ -15,6 +15,7 @@ export function App() {
     const newTodo = response.data
     const newTodoItems = [...todoItems, newTodo]
     setTodoItems(newTodoItems)
+    setNewTodoText('')
   }
   useEffect(function () {
     async function loadItems() {
