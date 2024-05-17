@@ -1,42 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import logo from './images/sdg-logo.svg'
 import axios from 'axios'
+
+type TodoItemType = {
+  id: number
+  text: string
+  complete: boolean
+  updated_at: Date
+  created_at: Date
+}
+
 export function App() {
   const [todoItems, setTodoItems] = useState<TodoItemType[]>([])
   const [newTodoText, setNewTodoText] = useState('')
-  async function handleCreateNewTodoItem() {
-    const response = await axios.post(
-      'https://one-list-api.herokuapp.com/items?access_token=cohort42',
-      { item: { text: newTodoText } }
-    )
-    if (response.status === 201) {
-      console.log(response.data)
-    }
-    const newTodo = response.data
-    const newTodoItems = [...todoItems, newTodo]
-    setTodoItems(newTodoItems)
-    setNewTodoText('')
-  }
+
   useEffect(function () {
     async function loadItems() {
       const response = await axios.get(
-        'https://one-list-api.herokuapp.com/items?access_token=cohort42'
+        'https://one-list-api.herokuapp.com/items?access_token=cohort26'
       )
       if (response.status === 200) {
-        console.log(response.data)
         setTodoItems(response.data)
       }
     }
     loadItems()
   }, [])
-  type TodoItemType = {
-    id: number
-    text: string
-    complete: boolean
-    updated_at: Date
-    created_at: Date
-  }
 
+  async function handleCreateNewTodoItem() {
+    const response = await axios.post(
+      'https://one-list-api.herokuapp.com/items?access_token=cohort26',
+      { item: { text: newTodoText } }
+    )
+    if (response.status === 201) {
+      console.log(response.data)
+    }
+    // const newTodo = response.data
+    // const newTodoItems = [...todoItems, newTodo]
+    // setTodoItems(newTodoItems)
+    // setNewTodoText('')
+    const refreshTodoResponse = await axios.get(
+      'https://one-list-api.herokuapp.com/items?access_token=cohort26'
+    )
+    setTodoItems(refreshTodoResponse.data)
+    setNewTodoText('')
+  }
   return (
     <div className="app">
       <header>
