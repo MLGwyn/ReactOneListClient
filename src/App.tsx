@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import logo from './images/sdg-logo.svg'
 import axios from 'axios'
+import { TodoItem } from './components/TodoItem'
 
-type TodoItemType = {
+export type TodoItemType = {
   id: number
   text: string
   complete: boolean
@@ -53,14 +54,7 @@ export function App() {
       <main>
         <ul>
           {todoItems.map(function (todoItem) {
-            return (
-              <li
-                key={todoItem.id}
-                className={todoItem.complete ? 'completed' : undefined}
-              >
-                {todoItem.text}
-              </li>
-            )
+            return <TodoItem key={todoItem.id} todoItem={todoItem} />
           })}
         </ul>
         <form
