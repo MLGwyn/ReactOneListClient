@@ -32,17 +32,16 @@ export function App() {
       { item: { text: newTodoText } }
     )
     if (response.status === 201) {
-      console.log(response.data)
+      // const newTodo = response.data
+      // const newTodoItems = [...todoItems, newTodo]
+      // setTodoItems(newTodoItems)
+      // setNewTodoText('')
+      const refreshTodoResponse = await axios.get(
+        'https://one-list-api.herokuapp.com/items?access_token=cohort26'
+      )
+      setTodoItems(refreshTodoResponse.data)
+      setNewTodoText('')
     }
-    // const newTodo = response.data
-    // const newTodoItems = [...todoItems, newTodo]
-    // setTodoItems(newTodoItems)
-    // setNewTodoText('')
-    const refreshTodoResponse = await axios.get(
-      'https://one-list-api.herokuapp.com/items?access_token=cohort26'
-    )
-    setTodoItems(refreshTodoResponse.data)
-    setNewTodoText('')
   }
   return (
     <div className="app">
