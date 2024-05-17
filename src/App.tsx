@@ -15,7 +15,7 @@ export function App() {
   const [todoItems, setTodoItems] = useState<TodoItemType[]>([])
   const [newTodoText, setNewTodoText] = useState('')
 
-  useEffect(function () {
+  function loadAllTheItems() {
     async function loadItems() {
       const response = await axios.get(
         'https://one-list-api.herokuapp.com/items?access_token=cohort26'
@@ -25,7 +25,9 @@ export function App() {
       }
     }
     loadItems()
-  }, [])
+  }
+
+  useEffect(loadAllTheItems, [])
 
   async function handleCreateNewTodoItem() {
     const response = await axios.post(
@@ -33,17 +35,8 @@ export function App() {
       { item: { text: newTodoText } }
     )
     if (response.status === 201) {
-      // const newTodo = response.data
-      // const newTodoItems = [...todoItems, newTodo]
-      // setTodoItems(newTodoItems)
-      // setNewTodoText('')
-      // ^this code is appending the list
-      const refreshTodoResponse = await axios.get(
-        'https://one-list-api.herokuapp.com/items?access_token=cohort26'
-      )
-      setTodoItems(refreshTodoResponse.data)
+      loadAllTheItems()
       setNewTodoText('')
-      // ^this code is replacing the list
     }
   }
   return (
@@ -54,7 +47,13 @@ export function App() {
       <main>
         <ul>
           {todoItems.map(function (todoItem) {
-            return <TodoItem key={todoItem.id} todoItem={todoItem} />
+            return (
+              <TodoItem
+                key={todoItem.id}
+                todoItem={todoItem}
+                reloadItems={loadAllTheItems}
+              />
+            )
           })}
         </ul>
         <form

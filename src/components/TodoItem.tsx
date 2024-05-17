@@ -4,6 +4,7 @@ import axios from 'axios'
 
 type TodoItemProps = {
   todoItem: TodoItemType
+  reloadItems: () => void
 }
 export function TodoItem(props: TodoItemProps) {
   async function toggleCompleteStatus() {
@@ -13,7 +14,7 @@ export function TodoItem(props: TodoItemProps) {
     )
 
     if (response.status === 200) {
-      console.log(response.data)
+      props.reloadItems()
     }
   }
 
