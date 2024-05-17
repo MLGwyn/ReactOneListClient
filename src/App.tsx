@@ -36,11 +36,13 @@ export function App() {
       // const newTodoItems = [...todoItems, newTodo]
       // setTodoItems(newTodoItems)
       // setNewTodoText('')
+      // ^this code is appending the list
       const refreshTodoResponse = await axios.get(
         'https://one-list-api.herokuapp.com/items?access_token=cohort26'
       )
       setTodoItems(refreshTodoResponse.data)
       setNewTodoText('')
+      // ^this code is replacing the list
     }
   }
   return (
