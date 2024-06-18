@@ -1,6 +1,7 @@
 import React from 'react'
 import { TodoItemType } from '../App'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 type TodoItemProps = {
   todoItem: TodoItemType
@@ -22,11 +23,9 @@ export function TodoItem({
   }
 
   return (
-    <li
-      className={complete ? 'completed' : undefined}
-      onClick={toggleCompleteStatus}
-    >
-      {text}
+    <li className={complete ? 'completed' : undefined}>
+      <span onClick={toggleCompleteStatus}>{text}</span>
+      <Link to={`/items/${id}`}>Show</Link>
     </li>
   )
 }

@@ -1,6 +1,7 @@
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 export function TodoItemPage() {
   const params = useParams<{ id: string }>()
@@ -25,12 +26,24 @@ export function TodoItemPage() {
     },
     [params.id]
   )
+  const navigate = useNavigate()
+  async function deleteTodoItem() {
+    const response = await axios.delete(
+      `https://one-list-api.herokuapp.com/items/${params.id}?access_token=cohort26`
+    )
+    if (response.status === 204) {
+      navigate('/')
+    }
+  }
   return (
     <div>
+      <p>
+        <Link to="/">Home</Link>
+      </p>
       <p className={todoItem.complete ? 'completed' : ''}>{todoItem.text}</p>
       <p>Created: {todoItem.created_at}</p>
       <p>Updated: {todoItem.updated_at}</p>
-      <button>Delete</button>
+      <button onClick={deleteTodoItem}>Delete</button>
     </div>
   )
 }
