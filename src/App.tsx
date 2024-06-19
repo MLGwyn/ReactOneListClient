@@ -2,7 +2,7 @@ import React from 'react'
 import logo from './images/sdg-logo.svg'
 import { Route, Routes } from 'react-router'
 import { TodoItemPage } from './Pages/TodoItemPage'
-import { TodoList } from './Pages/ToDoList'
+import { TodoList } from './Pages/TodoList'
 
 export type TodoItemType = {
   id: number
