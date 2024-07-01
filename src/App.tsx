@@ -1,6 +1,6 @@
 import React from 'react'
 import logo from './images/sdg-logo.svg'
-import { Route, Routes } from 'react-router'
+import { Route, Switch } from 'wouter'
 import { TodoItemPage } from './Pages/TodoItemPage'
 import { TodoList } from './Pages/TodoList'
 
@@ -19,11 +19,11 @@ export function App() {
         <h1>One List</h1>
       </header>
       <main>
-        <Routes>
-          <Route path="/" element={<TodoList />} />
-          <Route path="/items/:id" element={<TodoItemPage />} />
-          <Route path="*" element="Ooops, that URL is unknown" />
-        </Routes>
+        <Switch>
+          <Route path="/" component={TodoList} />
+          <Route path="/items/:id" component={TodoItemPage} />
+          <Route>Ooops, that URL is unknown</Route>
+        </Switch>
       </main>
       <footer>
         <p>

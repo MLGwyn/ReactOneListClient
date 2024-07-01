@@ -1,7 +1,7 @@
 import React from 'react'
 import { TodoItemType } from '../App'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link } from 'wouter'
 
 type TodoItemProps = {
   todoItem: TodoItemType
