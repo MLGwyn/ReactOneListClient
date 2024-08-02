@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { TodoItem } from '../components/TodoItem'
 import { TodoItemType } from '../App'
+import { useQuery } from 'react-query'
+
+async function getTodos() {
+  return (
+    await axios.get<TodoItemType[]>(
+      'https://one-list-api.herokuapp.com/items?access_token=cohort26'
+    )
+  ).data
+}
 
 export function TodoList() {
-  const [todoItems, setTodoItems] = useState<TodoItemType[]>([])
+  const {
+    data: todoItems = [],
+    refetch,
+    isLoading,
+  } = useQuery('todos', getTodos)
   const [newTodoText, setNewTodoText] = useState('')
 
-  function loadAllTheItems() {
-    async function loadItems() {
-      const response = await axios.get(
-        'https://one-list-api.herokuapp.com/items?access_token=cohort26'
-      )
-      if (response.status === 200) {
-        setTodoItems(response.data)
-      }
-    }
-    loadItems()
+  if (isLoading) {
+    return <div>Loading...</div>
   }
-
-  useEffect(loadAllTheItems, [])
 
   async function handleCreateNewTodoItem() {
     const response = await axios.post(
@@ -27,7 +30,7 @@ export function TodoList() {
       { item: { text: newTodoText } }
     )
     if (response.status === 201) {
-      loadAllTheItems()
+      refetch()
       setNewTodoText('')
     }
   }
@@ -39,7 +42,7 @@ export function TodoList() {
             <TodoItem
               key={todoItem.id}
               todoItem={todoItem}
-              reloadItems={loadAllTheItems}
+              reloadItems={refetch}
             />
           )
         })}
