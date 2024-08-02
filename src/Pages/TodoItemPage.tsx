@@ -1,30 +1,31 @@
 import { Link, useLocation, useParams } from 'wouter'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import axios from 'axios'
+import { TodoItemType } from '../App'
+import { useQuery } from 'react-query'
+
+async function getOneTodo(id: string) {
+  const response = await axios.get<TodoItemType>(
+    `https://one-list-api.herokuapp.com/items/${id}?access_token=cohort26`
+  )
+  return response.data
+}
+const EmptyTodoItem: TodoItemType = {
+  id: undefined,
+  text: '',
+  complete: false,
+  updated_at: undefined,
+  created_at: undefined,
+}
 
 export function TodoItemPage() {
   const params = useParams<{ id: string }>()
-  const [todoItem, setTodoItem] = useState({
-    id: undefined,
-    text: '',
-    complete: false,
-    created_at: undefined,
-    updated_at: undefined,
-  })
-  useEffect(
-    function () {
-      async function loadItems() {
-        const response = await axios.get(
-          `https://one-list-api.herokuapp.com/items/${params.id}?access_token=cohort26`
-        )
-        if (response.status === 200) {
-          setTodoItem(response.data)
-        }
-      }
-      loadItems()
-    },
-    [params.id]
+
+  const { data: todoItem = EmptyTodoItem, isLoading } = useQuery(
+    ['todo', params.id],
+    () => getOneTodo(params.id)
   )
+
   const [location, navigate] = useLocation()
   async function deleteTodoItem() {
     const response = await axios.delete(
@@ -34,6 +35,9 @@ export function TodoItemPage() {
       location
       navigate('/')
     }
+  }
+  if (isLoading) {
+    return null
   }
   return (
     <div>

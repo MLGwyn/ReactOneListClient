@@ -42,7 +42,7 @@ export function TodoList() {
             <TodoItem
               key={todoItem.id}
               todoItem={todoItem}
-              reloadItems={refetch}
+              reloadItems={() => refetch()}
             />
           )
         })}
