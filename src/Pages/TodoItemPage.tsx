@@ -1,35 +1,17 @@
 import { Link, useLocation, useParams } from 'wouter'
 import React from 'react'
-import { TodoItemType } from '../App'
-import { useMutation, useQuery } from 'react-query'
-import { deleteOneTodo, getOneTodo } from '../api'
-
-const EmptyTodoItem: TodoItemType = {
-  id: undefined,
-  text: '',
-  complete: false,
-  updated_at: undefined,
-  created_at: undefined,
-}
+import { useDeleteItemMutation, useLoadOneItem } from '../api'
 
 export function TodoItemPage() {
   const params = useParams<{ id: string }>()
-
-  const { data: todoItem = EmptyTodoItem, isLoading } = useQuery(
-    ['todo', params.id],
-    () => getOneTodo(params.id)
-  )
-
-  const deleteMutation = useMutation((id: string) => deleteOneTodo(id), {
-    onSuccess: function () {
-      location
-      navigate('/')
-    },
+  const [location, navigate] = useLocation()
+  const { todoItem, isTodoItemLoading } = useLoadOneItem(params.id)
+  const deleteMutation = useDeleteItemMutation(params.id, function () {
+    location
+    navigate('/')
   })
 
-  const [location, navigate] = useLocation()
-
-  if (isLoading) {
+  if (isTodoItemLoading) {
     return null
   }
   return (
@@ -42,7 +24,7 @@ export function TodoItemPage() {
       <p>Updated: {todoItem.updated_at}</p>
       <button
         onClick={function () {
-          deleteMutation.mutate(params.id)
+          deleteMutation.mutate()
         }}
       >
         Delete
