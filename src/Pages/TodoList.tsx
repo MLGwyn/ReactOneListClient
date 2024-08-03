@@ -1,23 +1,7 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { TodoItem } from '../components/TodoItem'
-import { TodoItemType } from '../App'
 import { useMutation, useQuery } from 'react-query'
-
-async function getTodos() {
-  return (
-    await axios.get<TodoItemType[]>(
-      'https://one-list-api.herokuapp.com/items?access_token=cohort26'
-    )
-  ).data
-}
-
-async function createNewTodoItem(newTodoText: string) {
-  return await axios.post(
-    'https://one-list-api.herokuapp.com/items?access_token=cohort26',
-    { item: { text: newTodoText } }
-  )
-}
+import { createNewTodoItem, getTodos } from '../api'
 
 export function TodoList() {
   const {

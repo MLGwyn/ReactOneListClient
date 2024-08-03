@@ -1,20 +1,12 @@
 import React from 'react'
 import { TodoItemType } from '../App'
-import axios from 'axios'
 import { Link } from 'wouter'
 import { useMutation } from 'react-query'
+import { toggleItemComplete } from '../api'
 
 type TodoItemProps = {
   todoItem: TodoItemType
   reloadItems: () => void
-}
-
-async function toggleItemComplete(id: number | undefined, complete: boolean) {
-  const response = axios.put(
-    `https://one-list-api.herokuapp.com/items/${id}?access_token=cohort26`,
-    { item: { complete: !complete } }
-  )
-  return response
 }
 
 export function TodoItem({
